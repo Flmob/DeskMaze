@@ -1,8 +1,0 @@
-7 7 5 2 5
-QWWWWWE
-A     D
-A FBBSD
-A B B D
-A     D
-A B BBD
-ZXXXXXC
