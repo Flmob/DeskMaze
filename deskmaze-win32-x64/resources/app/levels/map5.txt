@@ -1,0 +1,9 @@
+8 8 1 2 10
+QWWWWWWE
+A  BF  D
+AS BB BD
+A   B  D
+ABB    D
+A   B  D
+A      D
+ZXXXXXXC
