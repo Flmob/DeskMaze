@@ -1,4 +1,4 @@
-8 8 1 2 10
+1 2 10
 QWWWWWWE
 A  BF  D
 AS BB BD

@@ -17,26 +17,23 @@
      };
  };
 
- sprites = {
-     wall: new Sprite("./sprites/wall.png"),
-     wall1: new Sprite("./sprites/wall1.png"),
-     wall2: new Sprite("./sprites/wall2.png"),
-     wall3: new Sprite("./sprites/wall3.png"),
-
-     corner: new Sprite("./sprites/corner.png"),
-     corner1: new Sprite("./sprites/corner1.png"),
-     corner2: new Sprite("./sprites/corner2.png"),
-     corner3: new Sprite("./sprites/corner3.png"),
-
-     barrier: new Sprite("./sprites/barrier.png"),
-     floor: new Sprite("./sprites/floor.png"),
-     hole: new Sprite('./sprites/hole.png'),
-     cheese: new Sprite('./sprites/cheese.png'),
-
-     mouse: new Sprite('./sprites/mouse.png'),
-
-     won: new Sprite('./sprites/won.png'),
-     lose: new Sprite('./sprites/lose.png')
+ var sprites = {
+     'Q': new Sprite("./sprites/corner.png"),
+     'W': new Sprite("./sprites/wall.png"),
+     'E': new Sprite("./sprites/corner1.png"),
+     'A': new Sprite("./sprites/wall3.png"),
+     'D': new Sprite("./sprites/wall1.png"),
+     'Z': new Sprite("./sprites/corner3.png"),
+     'X': new Sprite("./sprites/wall2.png"),
+     'C': new Sprite("./sprites/corner2.png"),
+     'B': new Sprite("./sprites/barrier.png"),
+     '0': new Sprite("./sprites/barrier.png"),
+     ' ': new Sprite("./sprites/floor.png"),
+     'S': new Sprite('./sprites/hole.png'),
+     'F': new Sprite('./sprites/cheese.png'),
+     'mouse': new Sprite('./sprites/mouse.png'),
+     'won': new Sprite('./sprites/won.png'),
+     'lose': new Sprite('./sprites/lose.png'),
  };
 
  module.exports = sprites;

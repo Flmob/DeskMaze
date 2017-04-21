@@ -1,7 +1,8 @@
+var fs = require('fs');
 var sprites = require('./sprites');
 
-function game(context, inpLvl, scale) {
-    if (!inpLvl || !context) return null;
+function game(context, paths, scale) {
+    if (!paths || !context) return null;
 
     var aLeft = 37;
     var aUp = 38;
@@ -16,31 +17,47 @@ function game(context, inpLvl, scale) {
     var kRepl = 82;
     var kYes = 89;
     var kNo = 78;
+    var kEnter = 13;
 
     var sWon = 1;
-    var sLose = 2;
+    var sGame = 0;
+    var sLose = -1;
+    var state = sGame;
+    var lvlCount = 0;
 
-    var tfield = inpLvl.split('\n');
-    var tInfo = tfield.shift();
 
-    tInfo = tInfo.split(' ');
-    tInfo.splice(0, 2);
+    this.field = [];
+    this.tInfo = [];
+    this.info = [];
 
-    tInfo.forEach(function(element, i, arr) {
-        arr[i] = +arr[i];
-    }, this);
+    this.initLvl = function(nLvl) {
+        if (!(nLvl < paths.length - 1)) {
+            console.log("555555555555555");
+            this.drawField(sWon);
+            return;
+        }
+        this.field = fs.readFileSync(paths[nLvl], 'utf8').split('\n');
 
-    this.info = tInfo.slice();
+        this.tInfo = this.field.shift().split(' ');
 
-    for (var i = 0; i < tfield.length; i++) {
-        tfield[i] = tfield[i].split('');
-        if (tfield[i][tfield[i].length - 1] == '') tfield[i].pop();
-    }
+        this.tInfo.forEach(function(element, i, arr) {
+            arr[i] = +arr[i];
+        }, this);
 
-    this.field = tfield;
+        console.log(this.tInfo);
+
+        this.info = this.tInfo.slice();
+
+        this.field.forEach(function(element, i, arr) {
+            arr[i] = arr[i].split('');
+            if (i < arr.length - 1) arr[i].pop();
+        }, this);
+    };
+
+    this.initLvl(lvlCount);
 
     this.restart = function() {
-        this.info = tInfo.slice();
+        this.info = this.tInfo.slice();
         this.drawField();
     };
 
@@ -56,42 +73,17 @@ function game(context, inpLvl, scale) {
 
         for (var i = 0; i < this.field.length; i++) {
             for (var j = 0; j < this.field[i].length; j++) {
-                if (this.field[i][j] == 'Q') {
-                    sprites.corner.draw(context, j * scale, i * scale, scale, scale);
-                } else if (this.field[i][j] == 'W') {
-                    sprites.wall.draw(context, j * scale, i * scale, scale, scale);
-                } else if (this.field[i][j] == 'E') {
-                    sprites.corner1.draw(context, j * scale, i * scale, scale, scale);
-                } else if (this.field[i][j] == 'A') {
-                    sprites.wall3.draw(context, j * scale, i * scale, scale, scale);
-                } else if (this.field[i][j] == 'D') {
-                    sprites.wall1.draw(context, j * scale, i * scale, scale, scale);
-                } else if (this.field[i][j] == 'Z') {
-                    sprites.corner3.draw(context, j * scale, i * scale, scale, scale);
-                } else if (this.field[i][j] == 'X') {
-                    sprites.wall2.draw(context, j * scale, i * scale, scale, scale);
-                } else if (this.field[i][j] == 'C') {
-                    sprites.corner2.draw(context, j * scale, i * scale, scale, scale);
-                } else if (this.field[i][j] == 'B' || this.field[i][j] == '0') {
-                    sprites.barrier.draw(context, j * scale, i * scale, scale, scale);
-                } else if (this.field[i][j] == ' ') {
-                    sprites.floor.draw(context, j * scale, i * scale, scale, scale);
-                } else if (this.field[i][j] == 'S') {
-                    sprites.floor.draw(context, j * scale, i * scale, scale, scale);
-                    sprites.hole.draw(context, j * scale, i * scale, scale, scale);
-                } else if (this.field[i][j] == 'F') {
-                    sprites.floor.draw(context, j * scale, i * scale, scale, scale);
-                    sprites.cheese.draw(context, j * scale, i * scale, scale, scale);
-                }
+                sprites[' '].draw(context, j * scale, i * scale, scale, scale);
+                sprites[this.field[i][j]].draw(context, j * scale, i * scale, scale, scale);
             }
         }
 
-        sprites.mouse.draw(context, this.info[0] * scale, this.info[1] * scale, scale, scale);
+        sprites['mouse'].draw(context, this.info[0] * scale, this.info[1] * scale, scale, scale);
 
         if (state === sWon) {
-            sprites.won.draw(context, (w - 4.5) * scale, scale);
+            sprites['won'].draw(context, (w - 4) * scale, scale);
         } else if (state === sLose) {
-            sprites.lose.draw(context, (w - 4.5) * scale, scale);
+            sprites['lose'].draw(context, (w - 4) * scale, scale);
         }
     };
 
@@ -125,14 +117,19 @@ function game(context, inpLvl, scale) {
                 this.info[2]--;
             }
         } else if (kKode == kRepl) this.restart();
-
-        console.log(this.info);
+        else if (kKode == kEnter) this.initLvl(++lvlCount);
+        // console.log(this.info);
 
         if (this.field[this.info[1]][this.info[0]] == 'F') {
-            this.drawField(1);
+            state = sWon;
+            this.drawField(state);
         } else if (this.info[2] <= 0) {
-            this.drawField(2);
-        } else this.drawField();
+            state = sLose;
+            this.drawField(state);
+        } else {
+            state = sGame;
+            this.drawField(state);
+        }
     };
 }
 

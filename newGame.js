@@ -8,21 +8,21 @@ var i = 1;
 var inpLvl = '';
 var thisGame;
 
-canvas.onclick = function() {
-    try {
-        var PATH = __dirname + '/levels/map' + i + '.txt';
-        inpLvl = fs.readFileSync(PATH, 'utf8');
+window.onload = function() {
+    var paths = [];
+    isPath = true;
 
-        thisGame = new game(context, inpLvl, 16);
-        thisGame.drawField();
-
-        window.onkeydown = function(e) {
-            thisGame.move(e.keyCode);
-        };
-
+    while (isPath) {
+        isPath = fs.existsSync(__dirname + '/levels/map' + i + '.txt');
+        paths.push(__dirname + '/levels/map' + i + '.txt');
         i++;
-    } catch (err) {
-        console.error(err);
-        i = 1;
     }
+
+    console.log('All levels detected', paths);
+    thisGame = new game(context, paths, 16);
+    thisGame.drawField();
+
+    window.onkeydown = function(e) {
+        thisGame.move(e.keyCode);
+    };
 };
